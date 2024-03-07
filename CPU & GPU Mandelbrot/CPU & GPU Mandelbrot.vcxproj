@@ -81,7 +81,7 @@
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="Simulation\kernel.cu" />
+    <CudaCompile Include="Simulation\GPUMandelbrot.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />

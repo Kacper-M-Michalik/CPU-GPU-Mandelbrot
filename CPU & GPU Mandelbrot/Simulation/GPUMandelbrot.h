@@ -4,8 +4,29 @@
 #include "device_launch_parameters.h"
 #include <stdio.h>
 
-void Setup();
+struct GPUColorTexture
+{
+    int Width;
+    int Height;
 
-//void addKernel(int* c, const int* a, const int* b);
+    int* GPUOutputTexture;
+    sf::Uint8* CPUTexture;
 
-cudaError_t addWithCuda(int* c, const int* a, const int* b, unsigned int size);
+    GPUColorTexture(unsigned int SetWidth, unsigned int SetHeight)
+    {
+        Width = SetWidth;
+        Height = SetHeight;
+        cudaMalloc((void**)&GPUOutputTexture, Width * Height * sizeof(int));
+        CPUTexture = (sf::Uint8*)malloc(sizeof(sf::Uint8) * Width * Height * 4);
+    }
+
+    ~GPUColorTexture()
+    {
+        cudaFree(GPUOutputTexture);
+        free(CPUTexture);
+    }
+};
+
+GPUColorTexture* Setup(unsigned int Width, unsigned int Height);
+
+void RunGPUMandelbrot(GPUColorTexture* TargetTexture, const sf::Vector2d Offset, const double Zoom, const int MaxIterations);

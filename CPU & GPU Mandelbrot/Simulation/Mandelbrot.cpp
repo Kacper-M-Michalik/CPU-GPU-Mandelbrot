@@ -20,17 +20,18 @@ void SimpleMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, const Ve
 			if (PY == MaxPixelY - 1 && PX == MaxPixelX - 1) {
 				int test = 0;
 			}
-			float ScaledX = Offset.x + ((float)PX / (float)Texture->Width) * Zoom;
-			float ScaledY = Offset.y + ((float)PY / (float)Texture->Height) * Zoom;
 
-			float x = 0;
-			float y = 0;
+			double ScaledX = Offset.x + Zoom * (((double)PX / (double)Texture->Width) - 0.5);
+			double ScaledY = Offset.y + Zoom * (((double)PY / (double)Texture->Height) - 0.5);
+
+			double x = 0;
+			double y = 0;
 
 			int Iteration = 0;
 
 			while (x * x + y * y < 4.f && Iteration < MaxIterations)
 			{
-				float XTemp = x * x - y * y + ScaledX;
+				double XTemp = x * x - y * y + ScaledX;
 				y = 2 * x * y + ScaledY;
 				x = XTemp;
 				Iteration++;
@@ -62,8 +63,8 @@ void OptimisedMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, const
 	{
 		for (int PX = (int)TileOffset.x; PX < MaxPixelX; PX++)
 		{
-			double ScaledX = Offset.x + ((double)PX / (double)Texture->Width) * Zoom;
-			double ScaledY = Offset.y + ((double)PY / (double)Texture->Height) * Zoom;
+			double ScaledX = Offset.x + Zoom * (((double)PX / (double)Texture->Width) - 0.5);
+			double ScaledY = Offset.y + Zoom * (((double)PY / (double)Texture->Height) - 0.5);
 
 			double x = 0;
 			double y = 0;
@@ -114,15 +115,15 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 
 	for (int PY = (int)TileOffset.y; PY < MaxPixelY; PY++)
 	{
-		_ScaledY = _mm256_set1_pd(Offset.y + ((double)PY / (double)Texture->Height) * Zoom);
+		_ScaledY = _mm256_set1_pd(Offset.y + Zoom * (((double)PY / (double)Texture->Height) - 0.5));
 
 		for (int PX = (int)TileOffset.x; PX < MaxPixelX; PX +=4)
 		{
-			_ScaledX = _mm256_set_pd(Offset.x + ((double)PX / (double)Texture->Width) * Zoom,
-				Offset.x + ((double)(PX+1) / (double)Texture->Width) * Zoom,
-				Offset.x + ((double)(PX+2) / (double)Texture->Width) * Zoom,
-				Offset.x + ((double)(PX+3) / (double)Texture->Width) * Zoom);
-			
+			_ScaledX = _mm256_set_pd(Offset.x + Zoom * (((double)PX / (double)Texture->Width) - 0.5),
+				Offset.x + Zoom * (((double)(PX+1) / (double)Texture->Width) - 0.5),
+				Offset.x + Zoom * (((double)(PX + 2) / (double)Texture->Width) - 0.5),
+				Offset.x + Zoom * (((double)(PX + 3) / (double)Texture->Width) - 0.5));			
+
 			_x = _mm256_setzero_pd();
 			_y = _mm256_setzero_pd();
 			_x2 = _mm256_setzero_pd();
