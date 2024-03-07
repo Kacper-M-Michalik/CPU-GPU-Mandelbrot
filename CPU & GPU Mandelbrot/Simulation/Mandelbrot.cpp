@@ -193,7 +193,7 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 }
 
 /*
-void OptimisedSIMD512Mandelbrot(const ColorTexture& Text, const Vector2 TileOffset, const Vector2 TileSize, const DVector2 Offset, const double Zoom, const int MaxIterations)
+void OptimisedSIMD512Mandelbrot(ColorTexture* Texture, const Vector2f TileOffset, const Vector2f TileSize, const Vector2d Offset, const double Zoom, const int MaxIterations)
 {
 	float MandelbrotX;
 	float MandelbrotY;
@@ -212,6 +212,8 @@ void OptimisedSIMD512Mandelbrot(const ColorTexture& Text, const Vector2 TileOffs
 	__m512i _ConstOneInt = _mm512_set1_epi64(1);
 	__m512i _Iterations = _mm512_set1_epi64(0);
 	__m512i _MaxIterations = _mm512_set1_epi64(MaxIterations);
+
+	float a = 0.1f;
 
 	for (int PY = (int)TileOffset.y; PY < MaxPixelY; PY++)
 	{
@@ -261,68 +263,70 @@ void OptimisedSIMD512Mandelbrot(const ColorTexture& Text, const Vector2 TileOffs
 			//converts register to one big integer, if bigger than zero means we have at leasat one continuing value
 			if (_mm256_movemask_pd(_mm256_castsi256_pd(_Mask2)) > 0) goto repeat;
 
-			//extracting data
-			float a = 0.1f;
-			(*(Text.ColorArray + Text.Width * PY + PX)).r = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[3]) + 0.5f) * 255);
-			(*(Text.ColorArray + Text.Width * PY + PX)).g = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[3] + 2.094f) + 0.5f) * 255);
-			(*(Text.ColorArray + Text.Width * PY + PX)).b = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[3] + 4.188f) * 255));
-			(*(Text.ColorArray + Text.Width * PY + PX)).a = 255;
+			//Extracting data
+			const int Index = 4 * (Texture->Width * PY + PX);
+
+			Texture->Data[Index] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[3]) + 0.5f) * 255);
+			Texture->Data[Index + 1] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[3] + 2.094f) + 0.5f) * 255);
+			Texture->Data[Index + 2] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[3] + 4.188f) * 255));
+			Texture->Data[Index + 3] = (Uint8)255;
 
 			if (PX + 1 < MaxPixelX)
 			{
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).r = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2]) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).g = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2] + 2.094f) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).b = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2] + 4.188f) * 255));
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).a = 255;
+				Texture->Data[Index + 4] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2]) + 0.5f) * 255);
+				Texture->Data[Index + 5] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2] + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 6] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2] + 4.188f) * 255));
+				Texture->Data[Index + 7] = (Uint8)255;
 			}
 
 			if (PX + 2 < MaxPixelX)
 			{
-				(*(Text.ColorArray + Text.Width * PY + PX + 2)).r = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[1]) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 2)).g = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[1] + 2.094f) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 2)).b = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[1] + 4.188f) * 255));
-				(*(Text.ColorArray + Text.Width * PY + PX + 2)).a = 255;
+				Texture->Data[Index + 8] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1]) + 0.5f) * 255);
+				Texture->Data[Index + 9] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1] + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 10] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1] + 4.188f) * 255));
+				Texture->Data[Index + 11] = (Uint8)255;
 			}
 
 			if (PX + 3 < MaxPixelX)
 			{
-				(*(Text.ColorArray + Text.Width * PY + PX + 3)).r = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[0]) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 3)).g = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[0] + 2.094f) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 3)).b = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[0] + 4.188f) * 255));
-				(*(Text.ColorArray + Text.Width * PY + PX + 3)).a = 255;
+				Texture->Data[Index + 12] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0]) + 0.5f) * 255);
+				Texture->Data[Index + 13] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 14] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 4.188f) * 255));
+				Texture->Data[Index + 15] = (Uint8)255;
 			}
-
+			
 			if (PX + 4 < MaxPixelX)
 			{
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).r = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2]) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).g = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2] + 2.094f) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).b = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2] + 4.188f) * 255));
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).a = 255;
+				Texture->Data[Index + 16] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2]) + 0.5f) * 255);
+				Texture->Data[Index + 17] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2] + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 18] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2] + 4.188f) * 255));
+				Texture->Data[Index + 19] = (Uint8)255;
 			}
 
 			if (PX + 5 < MaxPixelX)
 			{
-				(*(Text.ColorArray + Text.Width * PY + PX + 2)).r = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[1]) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 2)).g = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[1] + 2.094f) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 2)).b = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[1] + 4.188f) * 255));
-				(*(Text.ColorArray + Text.Width * PY + PX + 2)).a = 255;
+				Texture->Data[Index + 20] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1]) + 0.5f) * 255);
+				Texture->Data[Index + 21] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1] + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 22] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1] + 4.188f) * 255));
+				Texture->Data[Index + 23] = (Uint8)255;
 			}
 
 			if (PX + 6 < MaxPixelX)
 			{
-				(*(Text.ColorArray + Text.Width * PY + PX + 3)).r = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[0]) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 3)).g = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[0] + 2.094f) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 3)).b = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[0] + 4.188f) * 255));
-				(*(Text.ColorArray + Text.Width * PY + PX + 3)).a = 255;
+				Texture->Data[Index + 24] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0]) + 0.5f) * 255);
+				Texture->Data[Index + 25] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 26] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 4.188f) * 255));
+				Texture->Data[Index + 27] = (Uint8)255;
 			}
 
 			if (PX + 7 < MaxPixelX)
 			{
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).r = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2]) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).g = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2] + 2.094f) + 0.5f) * 255);
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).b = unsigned char((0.5f * sin(a * _Iterations.m256i_i64[2] + 4.188f) * 255));
-				(*(Text.ColorArray + Text.Width * PY + PX + 1)).a = 255;
+				Texture->Data[Index + 28] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0]) + 0.5f) * 255);
+				Texture->Data[Index + 29] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 30] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 4.188f) * 255));
+				Texture->Data[Index + 31] = (Uint8)255;
 			}
+
 		}
 	}
 }

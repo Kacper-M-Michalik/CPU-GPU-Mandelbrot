@@ -5,6 +5,51 @@
 #include "device_launch_parameters.h"
 #include <stdio.h>
 
+/*
+CPU IMPLEMENTATION:
+void OptimisedMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, const Vector2f TileSize, const Vector2d Offset, const double Zoom, const int MaxIterations)
+{
+    float MandelbrotX;
+    float MandelbrotY;
+
+    int MaxPixelX = (int)TileOffset.x + (int)TileSize.x;
+    int MaxPixelY = (int)TileOffset.y + (int)TileSize.y;
+
+    float a = 0.1f;
+
+    for (int PY = (int)TileOffset.y; PY < MaxPixelY; PY++)
+    {
+        for (int PX = (int)TileOffset.x; PX < MaxPixelX; PX++)
+        {
+            double ScaledX = Offset.x + ((double)PX / (double)Texture->Width) * Zoom;
+            double ScaledY = Offset.y + ((double)PY / (double)Texture->Height) * Zoom;
+
+            double x = 0;
+            double y = 0;
+            double x2 = 0;
+            double y2 = 0;
+
+            int Iteration = 0;
+
+            while (x2 + y2 < 4.f && Iteration < MaxIterations)
+            {
+                y = 2 * x * y + ScaledY;
+                x = x2 - y2 + ScaledX;
+                x2 = x * x;
+                y2 = y * y;
+                Iteration++;
+            };
+
+            const int Index = 4 * (Texture->Width * PY + PX);
+            Texture->Data[Index] = (Uint8)((0.5f * sin(a * Iteration) + 0.5f) * 255);
+            Texture->Data[Index + 1] = (Uint8)((0.5f * sin(a * Iteration + 2.094f) + 0.5f) * 255);
+            Texture->Data[Index + 2] = (Uint8)((0.5f * sin(a * Iteration + 4.188f) * 255));
+            Texture->Data[Index + 3] = (Uint8)255;
+        }
+    }
+}
+*/
+
 __global__ void addKernel(int *c, const int *a, const int *b)
 {
     int i = threadIdx.x;
