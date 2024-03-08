@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <Mandelbrot.h>
 #include <GPUMandelbrot.h>
+#include <PerformanceCounter.h>
 
 //FIX CONSOLE ISSUE LATER
 
@@ -17,6 +18,7 @@ int main()
     unsigned int RenderAreaY = 800;
 
     sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Mandelbrot");
+
 
     //sf::RenderTexture GPUTexture;
     GPUColorTexture* GPUProcessingTexture = Setup(RenderAreaX, RenderAreaY);
@@ -31,8 +33,12 @@ int main()
     CPUTexture.setRepeated(false);
     ColorTexture CPUProcessingTexture(RenderAreaX, RenderAreaY);
    
-    bool CPUMode = true;
-    sf::Sprite MandelbrotSprite;
+    int RenderMode = 0;
+    int FrameMeasureCount = 100;
+    int CurrentFrame = 0;
+    PerformanceCounter CPUCounter(FrameMeasureCount);
+    PerformanceCounter GPUCounter1(FrameMeasureCount);
+    PerformanceCounter GPUCounter2(FrameMeasureCount);
 
     sf::Vector2f TileSize(RenderAreaX, (int)ceil((float)RenderAreaY / (float)std::thread::hardware_concurrency()));
     std::vector<std::thread> Threads;
@@ -40,10 +46,13 @@ int main()
     double Zoom = 1;
     int Iterations = 64;
 
+    sf::Sprite MandelbrotSprite;
     sf::Vector2i PreviousPosition = sf::Mouse::getPosition(window);
 
     while (window.isOpen())
     {
+        CurrentFrame++;
+
         sf::Event event;
         while (window.pollEvent(event))
         {           
@@ -69,7 +78,8 @@ int main()
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
             {
-                CPUMode = !CPUMode;
+                RenderMode++;
+                if (RenderMode > 2) RenderMode = 0;
             }
         } 
         
@@ -83,7 +93,7 @@ int main()
         PreviousPosition = NewPosition;
 
         auto StartTime = std::chrono::high_resolution_clock::now();
-        if (CPUMode)
+        if (RenderMode == 0)
         {
             int XTiles = ceil((float)RenderAreaX / (float)TileSize.x);
             int YTiles = ceil((float)RenderAreaY / (float)TileSize.y);
@@ -117,15 +127,48 @@ int main()
             CPUTexture.update(CPUProcessingTexture.Data);
             MandelbrotSprite.setTexture(CPUTexture, true);
         }
-        else
+        else if (RenderMode == 1)
         {
-            RunGPUMandelbrot(GPUProcessingTexture, Offset, Zoom, Iterations);
+            RunGPUMandelbrot(GPUProcessingTexture, 0, Offset, Zoom, Iterations);
             GPUTexture.update(GPUProcessingTexture->CPUTexture);
             MandelbrotSprite.setTexture(GPUTexture, true);
         }
+        else 
+        {
+            RunGPUMandelbrot(GPUProcessingTexture, 1, Offset, Zoom, Iterations);
+            GPUTexture.update(GPUProcessingTexture->CPUTexture);
+            MandelbrotSprite.setTexture(GPUTexture, true);
+        }
+
         double TimeMS = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - StartTime).count();
 
-        std::cout << TimeMS << std::endl;
+        if (RenderMode == 0) 
+        {
+            CPUCounter.AddTime(TimeMS);
+            if (CurrentFrame >= FrameMeasureCount)
+            {
+                std::cout << CPUCounter.GetAverageTime() << std::endl;
+                CurrentFrame = 0;
+            }
+        }
+        else if (RenderMode == 1)
+        {
+            GPUCounter1.AddTime(TimeMS);
+            if (CurrentFrame >= FrameMeasureCount)
+            {
+                std::cout << GPUCounter1.GetAverageTime() << std::endl;
+                CurrentFrame = 0;
+            }
+        }
+        else if (RenderMode == 2)
+        {
+            GPUCounter2.AddTime(TimeMS);
+            if (CurrentFrame >= FrameMeasureCount)
+            {
+                std::cout << GPUCounter2.GetAverageTime() << std::endl;
+                CurrentFrame = 0;
+            }
+        }
 
         window.clear(sf::Color::Black);
 

@@ -29,4 +29,4 @@ struct GPUColorTexture
 
 GPUColorTexture* Setup(unsigned int Width, unsigned int Height);
 
-void RunGPUMandelbrot(GPUColorTexture* TargetTexture, const sf::Vector2d Offset, const double Zoom, const int MaxIterations);
+void RunGPUMandelbrot(GPUColorTexture* TargetTexture, const int Version, const sf::Vector2d Offset, const double Zoom, const int MaxIterations);
