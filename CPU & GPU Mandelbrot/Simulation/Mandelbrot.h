@@ -25,4 +25,4 @@ struct ColorTexture
 
 void SimpleMandelbrot(ColorTexture* Texture, const sf::Vector2f TileOffset, const sf::Vector2f TileSize, const sf::Vector2d Offset, const double Zoom, const int MaxIterations);
 void OptimisedMandelbrot(ColorTexture* Text, const sf::Vector2f TileOffset, const sf::Vector2f TileSize, const sf::Vector2d Offset, const double Zoom, const int MaxIterations);
-void OptimisedSIMDMandelbrot(ColorTexture* Text, const sf::Vector2f TileOffset, const sf::Vector2f TileSize, const sf::Vector2d Offset, const double Zoom, const int MaxIterations);
+void OptimisedSIMDMandelbrot(ColorTexture* Text, const sf::Vector2f TileOffset, const sf::Vector2f TileSize, const sf::Vector2d Offset, const sf::Vector2d DrawArea, const int MaxIterations);

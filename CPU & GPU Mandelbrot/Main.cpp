@@ -12,15 +12,15 @@
 int main()
 {
     unsigned int WindowWidth = 1200;
-    unsigned int WindowHeight = 800;
-
-    unsigned int RenderAreaX = 1200;
-    unsigned int RenderAreaY = 800;
-
+    unsigned int WindowHeight = 900;
     sf::RenderWindow window(sf::VideoMode(WindowWidth, WindowHeight), "Mandelbrot");
 
 
-    //sf::RenderTexture GPUTexture;
+    //By default present a 2 unit height (in mdbrt coords) view on the mandelbrot set
+    unsigned int RenderAreaX = WindowWidth;
+    unsigned int RenderAreaY = WindowHeight;
+    const sf::Vector2d PixelsPerUnit(WindowHeight / 2.0, WindowHeight / 2.0);
+
     GPUColorTexture* GPUProcessingTexture = Setup(RenderAreaX, RenderAreaY);
     sf::Texture GPUTexture;
     GPUTexture.create(GPUProcessingTexture->Width, GPUProcessingTexture->Height);
@@ -38,16 +38,19 @@ int main()
     int CurrentFrame = 0;
     PerformanceCounter CPUCounter(FrameMeasureCount);
     PerformanceCounter GPUCounter1(FrameMeasureCount);
-    PerformanceCounter GPUCounter2(FrameMeasureCount);
+    //PerformanceCounter GPUCounter2(FrameMeasureCount);
 
     sf::Vector2f TileSize(RenderAreaX, (int)ceil((float)RenderAreaY / (float)std::thread::hardware_concurrency()));
     std::vector<std::thread> Threads;
-    sf::Vector2d Offset(0, 0);    
+
+
+    sf::Vector2d Offset(0, 0);
     double Zoom = 1;
     int Iterations = 64;
 
     sf::Sprite MandelbrotSprite;
     sf::Vector2i PreviousPosition = sf::Mouse::getPosition(window);
+
 
     while (window.isOpen())
     {
@@ -66,12 +69,12 @@ int main()
                 Zoom = Zoom * (1 - event.mouseWheelScroll.delta * 0.1f);
             }
 
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
+            if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::S))
             {
                 Iterations += -32;
             }
             
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
+            if (event.type == sf::Event::KeyPressed && (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::W))
             {
                 Iterations += 32;
             }
@@ -79,7 +82,7 @@ int main()
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
             {
                 RenderMode++;
-                if (RenderMode > 2) RenderMode = 0;
+                if (RenderMode > 1) RenderMode = 0;
             }
         } 
         
@@ -87,16 +90,17 @@ int main()
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
             sf::Vector2i Delta = NewPosition - PreviousPosition;
-            Offset.x -= Zoom * (double)Delta.x / WindowWidth;
-            Offset.y -= Zoom * (double)Delta.y / WindowHeight;
+            Offset.x -= Zoom * (double)Delta.x / PixelsPerUnit.x;
+            Offset.y -= Zoom * (double)Delta.y / PixelsPerUnit.y;
         }
         PreviousPosition = NewPosition;
 
         auto StartTime = std::chrono::high_resolution_clock::now();
         if (RenderMode == 0)
         {
-            int XTiles = ceil((float)RenderAreaX / (float)TileSize.x);
-            int YTiles = ceil((float)RenderAreaY / (float)TileSize.y);
+            int XTiles = ceilf((float)RenderAreaX / (float)TileSize.x);
+            int YTiles = ceilf((float)RenderAreaY / (float)TileSize.y);
+            sf::Vector2d DrawArea = sf::Vector2d(Zoom * (RenderAreaX / PixelsPerUnit.x), Zoom * (RenderAreaY / PixelsPerUnit.y));
 
             for (int x = 0; x < RenderAreaX; x += TileSize.x)
             {
@@ -111,10 +115,9 @@ int main()
                     if (RenderAreaY - y < TileSize.y)
                     {
                         ActualTileSize.y = RenderAreaY % (int)TileSize.y;
-                    }
-                    
+                    }                    
 
-                    Threads.push_back(std::thread(OptimisedSIMDMandelbrot, &CPUProcessingTexture, sf::Vector2f(x, y), ActualTileSize, Offset, Zoom, Iterations));
+                    Threads.push_back(std::thread(OptimisedSIMDMandelbrot, &CPUProcessingTexture, sf::Vector2f(x, y), ActualTileSize, Offset, DrawArea, Iterations));
                 }
             }
 
@@ -126,19 +129,21 @@ int main()
 
             CPUTexture.update(CPUProcessingTexture.Data);
             MandelbrotSprite.setTexture(CPUTexture, true);
+            //MandelbrotSprite.setTextureRect(sf::IntRect(0, 0, RenderAreaX, RenderAreaY));
         }
         else if (RenderMode == 1)
         {
-            RunGPUMandelbrot(GPUProcessingTexture, 0, Offset, Zoom, Iterations);
+            RunGPUMandelbrot(GPUProcessingTexture, Offset, sf::Vector2d(Zoom * ((double)RenderAreaX / PixelsPerUnit.x) * ((double)GPUProcessingTexture->Width / (double)RenderAreaX), Zoom * ((double)RenderAreaY / PixelsPerUnit.y) * ((double)GPUProcessingTexture->Height / (double)RenderAreaY)), Iterations);
             GPUTexture.update(GPUProcessingTexture->CPUTexture);
             MandelbrotSprite.setTexture(GPUTexture, true);
+            MandelbrotSprite.setTextureRect(sf::IntRect((GPUProcessingTexture->Width - RenderAreaX) / 2, (GPUProcessingTexture->Height - RenderAreaY) / 2, RenderAreaX, RenderAreaY));
         }
-        else 
+        /*else
         {
             RunGPUMandelbrot(GPUProcessingTexture, 1, Offset, Zoom, Iterations);
             GPUTexture.update(GPUProcessingTexture->CPUTexture);
             MandelbrotSprite.setTexture(GPUTexture, true);
-        }
+        }*/
 
         double TimeMS = std::chrono::duration<double, std::milli>(std::chrono::high_resolution_clock::now() - StartTime).count();
 
@@ -147,6 +152,7 @@ int main()
             CPUCounter.AddTime(TimeMS);
             if (CurrentFrame >= FrameMeasureCount)
             {
+                std::cout << "CPU:" << std::endl;
                 std::cout << CPUCounter.GetAverageTime() << std::endl;
                 CurrentFrame = 0;
             }
@@ -156,11 +162,12 @@ int main()
             GPUCounter1.AddTime(TimeMS);
             if (CurrentFrame >= FrameMeasureCount)
             {
+                std::cout << "GPU CUDA:" << std::endl;
                 std::cout << GPUCounter1.GetAverageTime() << std::endl;
                 CurrentFrame = 0;
             }
         }
-        else if (RenderMode == 2)
+        /*else if (RenderMode == 2)
         {
             GPUCounter2.AddTime(TimeMS);
             if (CurrentFrame >= FrameMeasureCount)
@@ -168,7 +175,7 @@ int main()
                 std::cout << GPUCounter2.GetAverageTime() << std::endl;
                 CurrentFrame = 0;
             }
-        }
+        }*/
 
         window.clear(sf::Color::Black);
 

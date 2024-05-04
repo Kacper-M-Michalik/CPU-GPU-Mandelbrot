@@ -83,7 +83,7 @@ void OptimisedMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, const
 	}
 }
 
-void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, const Vector2f TileSize, const Vector2d Offset, const double Zoom, const int MaxIterations)
+void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, const Vector2f TileSize, const Vector2d Offset, const Vector2d DrawArea, const int MaxIterations)
 {
 	const int MaxPixelX = (int)TileOffset.x + (int)TileSize.x;
 	const int MaxPixelY = (int)TileOffset.y + (int)TileSize.y;
@@ -98,7 +98,7 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 	__m256i _ConstOneInt = _mm256_set1_epi64x(1);
 
 	__m256d _ConstOffset = _mm256_set1_pd(Offset.x);
-	__m256d _ConstZoom = _mm256_set1_pd(Zoom);
+	__m256d _ConstZoom = _mm256_set1_pd(DrawArea.x);
 	__m256d _ConstTextureWidth = _mm256_set1_pd(Texture->Width);
 
 	__m256d _ScaledX, _ScaledY;
@@ -111,9 +111,9 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 
 	for (int PY = (int)TileOffset.y; PY < MaxPixelY; PY++)
 	{
-		_ScaledY = _mm256_set1_pd(Offset.y + Zoom * (((double)PY / (double)Texture->Height) - 0.5));
+		_ScaledY = _mm256_set1_pd(Offset.y + DrawArea.y * (((double)PY / (double)Texture->Height) - 0.5));
 
-		for (int PX = (int)TileOffset.x; PX < MaxPixelX; PX +=4)
+		for (int PX = (int)TileOffset.x; PX < MaxPixelX; PX += 4)
 		{
 			__m256d _ConstPX = _mm256_set1_pd(PX);
 			_ScaledX = _mm256_set_pd(0, 1, 2, 3);
@@ -133,7 +133,7 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 			_y2 = _mm256_setzero_pd();
 			_Iterations = _mm256_setzero_si256();
 			
-			//We do this hack cause we want ot keep the vars in scope, definign them potuside is ugly (may apparently initalise them too?)
+			//We do this hack cause we want to keep the vars in scope, definign them outside is ugly (may apparently initalise them too?)
 			//Inner loop
 			repeat:
 			_x = _mm256_add_pd(_x, _x);
@@ -162,18 +162,18 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 			if (_mm256_movemask_pd(_mm256_castsi256_pd(_Mask2)) > 0) goto repeat;
 
 			//Extracting data
-			const int Index = 4 * (Texture->Width * PY + PX);
+			const int Index = 4 * (Texture->Width * PY + PX);						
 
 			Texture->Data[Index] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[3]) + 0.5f) * 255);
 			Texture->Data[Index + 1] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[3] + 2.094f) + 0.5f) * 255);
-			Texture->Data[Index + 2] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[3] + 4.188f) * 255));
+			Texture->Data[Index + 2] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[3] + 4.188f) + 0.5f) * 255);
 			Texture->Data[Index + 3] = (Uint8)255;
 
 			if (PX + 1 < MaxPixelX)
 			{
 				Texture->Data[Index + 4] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2]) + 0.5f) * 255);
 				Texture->Data[Index + 5] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2] + 2.094f) + 0.5f) * 255);
-				Texture->Data[Index + 6] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2] + 4.188f) * 255));
+				Texture->Data[Index + 6] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[2] + 4.188f) + 0.5f) * 255);
 				Texture->Data[Index + 7] = (Uint8)255;
 			}
 
@@ -181,7 +181,7 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 			{
 				Texture->Data[Index + 8] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1]) + 0.5f) * 255);
 				Texture->Data[Index + 9] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1] + 2.094f) + 0.5f) * 255);
-				Texture->Data[Index + 10] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1] + 4.188f) * 255));
+				Texture->Data[Index + 10] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[1] + 4.188f) + 0.5f) * 255);
 				Texture->Data[Index + 11] = (Uint8)255;
 			}
 
@@ -189,9 +189,41 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 			{
 				Texture->Data[Index + 12] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0]) + 0.5f) * 255);
 				Texture->Data[Index + 13] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 2.094f) + 0.5f) * 255);
-				Texture->Data[Index + 14] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 4.188f) * 255));
+				Texture->Data[Index + 14] = (Uint8)((0.5f * sin(a * _Iterations.m256i_i64[0] + 4.188f) + 0.5f) * 255);
 				Texture->Data[Index + 15] = (Uint8)255;
 			}
+
+			/*
+			Texture->Data[Index] = (Uint8)(_Iterations.m256i_i64[3]);
+			Texture->Data[Index + 1] = (Uint8)(_Iterations.m256i_i64[3]);
+			Texture->Data[Index + 2] = (Uint8)(_Iterations.m256i_i64[3]);
+			Texture->Data[Index + 3] = 255;
+
+			if (PX + 1 < MaxPixelX)
+			{
+				Texture->Data[Index + 4] = (Uint8)(_Iterations.m256i_i64[2]);
+				Texture->Data[Index + 5] = (Uint8)(_Iterations.m256i_i64[2]);
+				Texture->Data[Index + 6] = (Uint8)(_Iterations.m256i_i64[2]);
+				Texture->Data[Index + 7] = (Uint8)255;
+			}
+
+			if (PX + 2 < MaxPixelX)
+			{
+				Texture->Data[Index + 8] = (Uint8)(_Iterations.m256i_i64[1]);
+				Texture->Data[Index + 9] = (Uint8)(_Iterations.m256i_i64[1]);
+				Texture->Data[Index + 10] = (Uint8)(_Iterations.m256i_i64[1]);
+				Texture->Data[Index + 11] = (Uint8)255;
+			}
+
+			if (PX + 3 < MaxPixelX)
+			{
+				Texture->Data[Index + 12] = (Uint8)(_Iterations.m256i_i64[0]);
+				Texture->Data[Index + 13] = (Uint8)(_Iterations.m256i_i64[0]);
+				Texture->Data[Index + 14] = (Uint8)(_Iterations.m256i_i64[0]);
+				Texture->Data[Index + 15] = (Uint8)255;
+			}
+			*/
+
 		}
 	}
 }

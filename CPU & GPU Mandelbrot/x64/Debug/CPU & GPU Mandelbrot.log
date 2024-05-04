@@ -1,12 +1,60 @@
-﻿  Mandelbrot.cpp
-C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\Mandelbrot.cpp(40,10): warning C4456: declaration of 'a' hides previous local declaration
-  C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\Mandelbrot.cpp(14,8):
-  see declaration of 'a'
+﻿  Main.cpp
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\PerformanceCounter.h(18,21): warning C4018: '<': signed/unsigned mismatch
+  (compiling source file 'Main.cpp')
   
-C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\Mandelbrot.cpp(14,8): warning C4189: 'a': local variable is initialized but not referenced
-C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\Mandelbrot.cpp(21,9): warning C4189: 'test': local variable is initialized but not referenced
-C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\Mandelbrot.cpp(54,8): warning C4101: 'MandelbrotX': unreferenced local variable
-C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\Mandelbrot.cpp(55,8): warning C4101: 'MandelbrotY': unreferenced local variable
-C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\Mandelbrot.cpp(96,8): warning C4101: 'MandelbrotX': unreferenced local variable
-C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\Mandelbrot.cpp(97,8): warning C4101: 'MandelbrotY': unreferenced local variable
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\PerformanceCounter.h(28,22): warning C4018: '>': signed/unsigned mismatch
+  (compiling source file 'Main.cpp')
+  
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\PerformanceCounter.h(29,22): warning C4018: '>=': signed/unsigned mismatch
+  (compiling source file 'Main.cpp')
+  
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Simulation\PerformanceCounter.h(36,21): warning C4018: '<': signed/unsigned mismatch
+  (compiling source file 'Main.cpp')
+  
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244: 'argument': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(101,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(102,24): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(105,31): warning C4018: '<': signed/unsigned mismatch
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(105,59): warning C4244: '+=': conversion from 'T' to 'int', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(105,59): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(105,59): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(105,59): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(105,59): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(107,35): warning C4018: '<': signed/unsigned mismatch
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(107,63): warning C4244: '+=': conversion from 'T' to 'int', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(107,63): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(107,63): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(107,63): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(107,63): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(113,56): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(113,56): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(113,56): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(113,56): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(113,56): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(117,56): warning C4244: '=': conversion from 'unsigned int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(117,56): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(117,56): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(117,56): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(117,56): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,115): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,115): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,115): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,115): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,115): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,112): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,112): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,112): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,112): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(120,112): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(102,17): warning C4189: 'YTiles': local variable is initialized but not referenced
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(101,17): warning C4189: 'XTiles': local variable is initialized but not referenced
   CPU & GPU Mandelbrot.vcxproj -> C:\Work\CPU & GPU Mandelbrot\x64\Debug\CPU & GPU Mandelbrot.exe
