@@ -193,6 +193,50 @@ void OptimisedSIMDMandelbrot(ColorTexture* Texture, const Vector2f TileOffset, c
 				Texture->Data[Index + 15] = (Uint8)255;
 			}
 
+			//NEED TO pERFORMANMCE TEST THIS
+			/*
+			int Iteration = _Iterations.m256i_i64[3];
+			if (Iteration == MaxIterations && MaxIterations >= 64) Iteration = 64;
+
+			Texture->Data[Index] = (Uint8)((0.5f * sin(a * Iteration) + 0.5f) * 255);
+			Texture->Data[Index + 1] = (Uint8)((0.5f * sin(a * Iteration + 2.094f) + 0.5f) * 255);
+			Texture->Data[Index + 2] = (Uint8)((0.5f * sin(a * Iteration + 4.188f) + 0.5f) * 255);
+			Texture->Data[Index + 3] = (Uint8)255;
+
+			if (PX + 1 < MaxPixelX)
+			{
+				Iteration = _Iterations.m256i_i64[2];
+				if (Iteration == MaxIterations && MaxIterations >= 64) Iteration = 64;
+
+				Texture->Data[Index + 4] = (Uint8)((0.5f * sin(a * Iteration) + 0.5f) * 255);
+				Texture->Data[Index + 5] = (Uint8)((0.5f * sin(a * Iteration + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 6] = (Uint8)((0.5f * sin(a * Iteration + 4.188f) + 0.5f) * 255);
+				Texture->Data[Index + 7] = (Uint8)255;
+			}
+
+			if (PX + 2 < MaxPixelX)
+			{
+				Iteration = _Iterations.m256i_i64[1];
+				if (Iteration == MaxIterations && MaxIterations >= 64) Iteration = 64;
+
+				Texture->Data[Index + 8] = (Uint8)((0.5f * sin(a * Iteration) + 0.5f) * 255);
+				Texture->Data[Index + 9] = (Uint8)((0.5f * sin(a * Iteration + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 10] = (Uint8)((0.5f * sin(a * Iteration + 4.188f) + 0.5f) * 255);
+				Texture->Data[Index + 11] = (Uint8)255;
+			}
+
+			if (PX + 3 < MaxPixelX)
+			{
+				Iteration = _Iterations.m256i_i64[0];
+				if (Iteration == MaxIterations && MaxIterations >= 64) Iteration = 64;
+
+				Texture->Data[Index + 12] = (Uint8)((0.5f * sin(a * Iteration) + 0.5f) * 255);
+				Texture->Data[Index + 13] = (Uint8)((0.5f * sin(a * Iteration + 2.094f) + 0.5f) * 255);
+				Texture->Data[Index + 14] = (Uint8)((0.5f * sin(a * Iteration + 4.188f) + 0.5f) * 255);
+				Texture->Data[Index + 15] = (Uint8)255;
+			}
+			*/
+
 			/*
 			Texture->Data[Index] = (Uint8)(_Iterations.m256i_i64[3]);
 			Texture->Data[Index + 1] = (Uint8)(_Iterations.m256i_i64[3]);

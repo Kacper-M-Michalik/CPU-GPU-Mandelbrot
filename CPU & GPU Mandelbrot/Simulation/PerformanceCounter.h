@@ -1,15 +1,18 @@
 #pragma once
 #include <stdlib.h>
+#include <string>
 
 struct PerformanceCounter
-{
+{	
+	std::string Name;
 	double* TimeArray;
-	unsigned int Size;
-	unsigned int RealSize;
+	int Size;
+	int RealSize;
 	int PlacementIndex;
 
-	PerformanceCounter(unsigned int SetSize) 
+	PerformanceCounter(int SetSize, std::string SetName) 
 	{
+		Name = SetName;
 		PlacementIndex = 0;
 		RealSize = 0;
 		Size = SetSize;

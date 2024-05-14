@@ -29,4 +29,7 @@ struct GPUColorTexture
 
 GPUColorTexture* Setup(unsigned int Width, unsigned int Height);
 
-void RunGPUMandelbrot(GPUColorTexture* TargetTexture, const sf::Vector2d Offset, const sf::Vector2d DrawArea, const int MaxIterations);
+int plerp(double Base, double Max, double Point, double Power, int3 BaseColor, int3 MaxColor);
+
+void RunMandelbrotKernel(GPUColorTexture* TargetTexture, const sf::Vector2d Offset, const sf::Vector2d DrawArea, const int MaxIterations);
+void RunJuliaKernel(GPUColorTexture* TargetTexture, const sf::Vector2d Offset, const sf::Vector2d DrawArea, const sf::Vector2d C, const int MaxIterations);
