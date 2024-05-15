@@ -45,5 +45,5 @@ ipch/
 *.VC.VC.opendb
 *.tlog
 *.ilk
-*.pdb
+#*.pdb
 *.pidb
