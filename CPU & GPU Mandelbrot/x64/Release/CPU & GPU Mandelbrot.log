@@ -1,0 +1,49 @@
+﻿  Main.cpp
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,49): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(43,27): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(154,59): warning C4244: '+=': conversion from 'T' to 'int', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(154,59): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(154,59): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(154,59): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(154,59): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(156,63): warning C4244: '+=': conversion from 'T' to 'int', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(156,63): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(156,63): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(156,63): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(156,63): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(162,56): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(162,56): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(162,56): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(162,56): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(162,56): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(166,56): warning C4244: '=': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(166,56): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(166,56): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(166,56): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(166,56): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,115): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,115): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,115): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,115): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,115): warning C4244:         ]
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,112): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,112): warning C4244:         with
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,112): warning C4244:         [
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,112): warning C4244:             T=float
+C:\Work\CPU & GPU Mandelbrot\CPU & GPU Mandelbrot\Main.cpp(169,112): warning C4244:         ]
+     Creating library C:\Work\CPU & GPU Mandelbrot\x64\Release\CPU & GPU Mandelbrot.lib and object C:\Work\CPU & GPU Mandelbrot\x64\Release\CPU & GPU Mandelbrot.exp
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  1 of 218 functions ( 0.5%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  CPU & GPU Mandelbrot.vcxproj -> C:\Work\CPU & GPU Mandelbrot\x64\Release\CPU & GPU Mandelbrot.exe

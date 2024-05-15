@@ -32,6 +32,7 @@
 #*.app
 
 #Other
+*.vsidx
 *.suo
 ipch/
 *.aps
